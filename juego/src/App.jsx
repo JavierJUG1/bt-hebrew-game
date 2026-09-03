@@ -1,16 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { CONFIG, erroresMaximos } from './data/config.js';
+import { CONFIG, SONIDO, erroresMaximos } from './data/config.js';
 import { EQUIPOS } from './data/equipos.js';
 import { RONDAS } from './data/rondas.js';
 
 import { analizarFrase, contarAciertos, frasesCompleta } from './lib/hebreo.js';
+import { armarPartida } from './lib/partida.js';
+import { GestorDeSonido } from './lib/sonido.js';
 
 import BarraSuperior from './components/BarraSuperior.jsx';
 import PanelPalabra from './components/PanelPalabra.jsx';
 import Teclado from './components/Teclado.jsx';
 import Marcador from './components/Marcador.jsx';
-import Burro, { SiluetaBurro } from './components/Burro.jsx';
+import Burro from './components/Burro.jsx';
 import CapaResultado from './components/CapaResultado.jsx';
 import PantallaFinal from './components/PantallaFinal.jsx';
 
@@ -30,14 +32,65 @@ const rondaLimpia = () => ({
 });
 
 export default function App() {
+  /* Las rondas de ESTA partida: barajadas dentro de cada nivel. Se rearman
+     en cada partida nueva, así que dos seguidas nunca traen el mismo orden. */
+  const [rondas, setRondas] = useState(() => armarPartida(RONDAS, CONFIG));
   const [rondaIdx, setRondaIdx] = useState(0);
   const [puntajes, setPuntajes] = useState(() => EQUIPOS.map(() => 0));
   const [r, setR] = useState(rondaLimpia);
   const [partidaTerminada, setPartidaTerminada] = useState(false);
   const [equipoQueSube, setEquipoQueSube] = useState(null);
   const [confirmarReinicio, setConfirmarReinicio] = useState(false);
+  const [capaVisible, setCapaVisible] = useState(false);
+  const [sonidoActivo, setSonidoActivo] = useState(SONIDO.activo);
+  const [sonidoBloqueado, setSonidoBloqueado] = useState(false);
 
-  const ronda = RONDAS[rondaIdx];
+  /* El gestor de sonido se crea una sola vez y vive toda la partida. */
+  const sonido = useRef(null);
+  if (sonido.current === null) sonido.current = new GestorDeSonido(SONIDO);
+
+  /* La música intenta sonar sola al cargar. Casi siempre el navegador lo
+     bloqueará —Chrome no permite autoplay en file:// ni con el audio
+     silenciado— y entonces se cae al plan B: arranca con el primer clic o la
+     primera tecla, y mientras tanto el botón de la barra avisa de que el
+     sonido está esperando. El lanzador "Juego con sonido.bat" abre Chrome con
+     el permiso concedido y ahí sí suena desde el primer instante. */
+  useEffect(() => {
+    let vivo = true;
+    const arrancar = () => {
+      sonido.current?.iniciar();
+      setSonidoBloqueado(false);
+    };
+
+    sonido.current?.intentarAutomatico().then((sono) => {
+      if (!vivo) return;
+      if (sono) return;
+      setSonidoBloqueado(true);
+      window.addEventListener('pointerdown', arrancar, { once: true });
+      window.addEventListener('keydown', arrancar, { once: true });
+    });
+
+    return () => {
+      vivo = false;
+      window.removeEventListener('pointerdown', arrancar);
+      window.removeEventListener('keydown', arrancar);
+    };
+  }, []);
+
+  /* Al desmontar (recarga, cierre) se sueltan los elementos de audio. */
+  useEffect(() => () => sonido.current?.destruir(), []);
+
+  const alternarSonido = useCallback(() => {
+    const g = sonido.current;
+    if (!g) return;
+    const activo = g.alternar();
+    // Si aún no había habido gesto, este clic ya lo es: arranca la música.
+    if (activo) g.iniciar();
+    setSonidoActivo(activo);
+    setSonidoBloqueado(false);
+  }, []);
+
+  const ronda = rondas[rondaIdx];
   const maximo = erroresMaximos(ronda);
   const turnoIdx = rondaIdx % EQUIPOS.length;
   const equipo = EQUIPOS[turnoIdx];
@@ -83,26 +136,72 @@ export default function App() {
   /** Pasar a la siguiente ronda (o a la pantalla final). */
   const continuar = useCallback(() => {
     setEquipoQueSube(null);
-    if (rondaIdx + 1 >= RONDAS.length) {
+    if (rondaIdx + 1 >= rondas.length) {
       setPartidaTerminada(true);
     } else {
       setRondaIdx((i) => i + 1);
       setR(rondaLimpia());
     }
-  }, [rondaIdx]);
+  }, [rondaIdx, rondas.length]);
 
   const nuevaPartida = useCallback(() => {
+    setRondas(armarPartida(RONDAS, CONFIG));
     setRondaIdx(0);
     setPuntajes(EQUIPOS.map(() => 0));
     setR(rondaLimpia());
     setPartidaTerminada(false);
     setEquipoQueSube(null);
     setConfirmarReinicio(false);
+    // "VICTORIA" apaga la música: una partida nueva la vuelve a encender.
+    sonido.current?.reiniciarMusica();
   }, []);
 
-  /* Enter / Espacio avanzan cuando la ronda ha terminado. */
+  /* Al ganar, la tarjeta sale al instante. Al perder se espera un momento:
+     ese hueco es lo que deja ver al burro plantarse y a las moscas llegar.
+     El retardo vive en CONFIG.msAntesDeLaTarjetaDeDerrota. */
   useEffect(() => {
-    if (r.fase === 'jugando' || partidaTerminada) return;
+    if (r.fase === 'jugando') {
+      setCapaVisible(false);
+      return;
+    }
+    if (r.fase === 'ganada' || CONFIG.msAntesDeLaTarjetaDeDerrota <= 0) {
+      setCapaVisible(true);
+      return;
+    }
+    const t = setTimeout(() => setCapaVisible(true), CONFIG.msAntesDeLaTarjetaDeDerrota);
+    return () => clearTimeout(t);
+  }, [r.fase]);
+
+  /* Atajo de teclado para silenciar. Existe porque mientras hay una tarjeta
+     abierta el botón de la barra queda tapado, y quien proyecta necesita poder
+     callar el juego en cualquier momento sin buscar el ratón. */
+  useEffect(() => {
+    const h = (e) => {
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        alternarSonido();
+      }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [alternarSonido]);
+
+  /* Los efectos suenan en el momento del hecho, no cuando sale la tarjeta:
+     "PIERDE TODOS LOS INTENTOS" acompaña al burro plantándose y a las moscas,
+     durante la espera previa a la tarjeta. */
+  useEffect(() => {
+    if (r.fase === 'ganada') sonido.current?.reproducirEfecto('palabraCompletada');
+    if (r.fase === 'perdida') sonido.current?.reproducirEfecto('pierdeIntentos');
+  }, [r.fase]);
+
+  useEffect(() => {
+    if (partidaTerminada) sonido.current?.reproducirEfecto('victoria');
+  }, [partidaTerminada]);
+
+  /* Enter / Espacio avanzan cuando la tarjeta ya está en pantalla. Antes no:
+     saltarse la espera adelantaría la ronda sin haber visto la respuesta. */
+  useEffect(() => {
+    if (!capaVisible || partidaTerminada) return;
     const h = (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -111,17 +210,20 @@ export default function App() {
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [r.fase, partidaTerminada, continuar]);
+  }, [capaVisible, partidaTerminada, continuar]);
 
   const terminada = r.fase !== 'jugando';
 
   return (
     <div className="app">
       <BarraSuperior
-        rondas={RONDAS}
+        rondas={rondas}
         rondaIdx={rondaIdx}
         ronda={ronda}
         onReiniciar={() => setConfirmarReinicio(true)}
+        sonidoActivo={sonidoActivo}
+        sonidoBloqueado={sonidoBloqueado}
+        onAlternarSonido={alternarSonido}
       />
 
       <div className="tablero">
@@ -130,6 +232,7 @@ export default function App() {
             className="turno panel"
             style={{
               '--color-equipo': equipo.color,
+              '--color-tinta': equipo.colorTinta,
               background: equipo.colorSuave,
               borderColor: equipo.color,
             }}
@@ -173,7 +276,7 @@ export default function App() {
               >
                 {Array.from({ length: maximo }, (_, i) => (
                   <span key={i} className="intentos__marca" data-usado={i < r.errores ? 'si' : 'no'}>
-                    <SiluetaBurro variante={i % 3} />
+                    {i + 1}
                   </span>
                 ))}
               </div>
@@ -189,13 +292,13 @@ export default function App() {
         </div>
       </div>
 
-      {terminada && !partidaTerminada && (
+      {terminada && capaVisible && !partidaTerminada && (
         <CapaResultado
           gano={r.fase === 'ganada'}
           ronda={ronda}
           equipo={equipo}
           puntosGanados={r.puntosGanados}
-          ultima={rondaIdx + 1 >= RONDAS.length}
+          ultima={rondaIdx + 1 >= rondas.length}
           onContinuar={continuar}
         />
       )}

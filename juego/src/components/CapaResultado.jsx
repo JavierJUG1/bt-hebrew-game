@@ -30,7 +30,7 @@ export default function CapaResultado({ gano, ronda, equipo, puntosGanados, ulti
           </div>
 
           <div className="acciones">
-            <button className={'btn' + (gano ? ' btn--oro' : '')} onClick={onContinuar} autoFocus>
+            <button className={'btn' + (gano ? ' btn--destacado' : '')} onClick={onContinuar} autoFocus>
               {ultima ? 'Ver resultados finales' : 'Continuar'}
             </button>
           </div>

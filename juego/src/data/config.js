@@ -38,6 +38,70 @@ export const CONFIG = {
 
   /** Duración (ms) de la pantalla de celebración antes de habilitar "Continuar". */
   msCelebracion: 900,
+
+  /**
+   * Espera (ms) entre el último fallo y la tarjeta "El burro se quedó plantado".
+   * Ese hueco es lo que deja ver la escena completarse: el burro se planta y
+   * llegan las moscas. Con 0 la tarjeta tapa la animación al instante.
+   * Súbelo si quieres más pausa dramática; bájalo si en el aula se hace lento.
+   */
+  msAntesDeLaTarjetaDeDerrota: 1200,
+
+  /**
+   * Cuántas rondas se juegan de cada nivel, y en qué orden van los niveles.
+   *
+   * El contenido se baraja DENTRO de cada nivel, nunca entre niveles: dos
+   * partidas seguidas traen las palabras en distinto orden, pero la partida
+   * siempre empieza fácil y termina difícil. Barajar los once de corrido
+   * rompería la curva y podría abrir con un versículo de Salmos.
+   *
+   * Si en `rondas.js` hay MÁS palabras de las pedidas, cada partida escoge un
+   * subconjunto distinto: puedes acumular decenas de palabras y el juego nunca
+   * repetirá la misma sesión. Si hay menos, se juegan las que haya.
+   * Pon `null` en un nivel para que se jueguen todas las suyas.
+   */
+  rondasPorNivel: {
+    facil: 4,
+    intermedio: 4,
+    avanzado: 3,
+  },
+  ordenDeNiveles: ['facil', 'intermedio', 'avanzado'],
+};
+
+/**
+ * ─────────────────────────────────────────────────────────
+ *  SONIDO
+ *  Los seis MP3 están en `Assets/audios/`. Para cambiar una pista basta con
+ *  reemplazar el archivo conservando el nombre y volver a compilar.
+ * ─────────────────────────────────────────────────────────
+ */
+export const SONIDO = {
+  /** Con qué estado arranca el juego. El botón de la barra lo alterna. */
+  activo: true,
+
+  /**
+   * La música es fondo, no protagonista: tiene que dejar oír a los niños
+   * leyendo hebreo en voz alta. 0.30 es alto en un portátil y correcto en un
+   * salón con parlante. Los efectos van fuertes porque son el premio.
+   */
+  volumenMusica: 0.3,
+  volumenEfectos: 0.9,
+
+  /** Volumen de la música mientras suena un efecto que solo la atenúa. */
+  volumenMusicaAtenuada: 0.08,
+
+  /**
+   * Qué le pasa a la música cuando suena cada efecto:
+   *   'pausar'  → se detiene del todo y vuelve al acabar el efecto
+   *   'atenuar' → baja y se recupera al acabar
+   *   'detener' → se apaga y no vuelve
+   *   'nada'    → sigue igual
+   */
+  efectoSobreMusica: {
+    palabraCompletada: 'atenuar',
+    pierdeIntentos: 'pausar',
+    victoria: 'detener',
+  },
 };
 
 /** Etiquetas visibles de cada nivel. */

@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
 
-const COLORES = ['#D9B435', '#8FC044', '#2E8B84', '#C25E3A', '#6C5CA8', '#EAC09A'];
+/**
+ * Confeti en la paleta institucional. Se incluye el dorado del trofeo como
+ * único acento cálido: es el color del logro, no de la interfaz.
+ * El blanco se mantiene porque el confeti cae sobre el velo azul oscuro.
+ */
+const COLORES = ['#1d71b8', '#3dc0ff', '#0098e1', '#003b57', '#ffffff', '#d9b435'];
 
 export default function Confeti({ piezas = 90 }) {
   const trozos = useMemo(

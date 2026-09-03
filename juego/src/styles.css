@@ -1,42 +1,79 @@
 /* ═══════════════════════════════════════════════════════════════
    ADIVINA LA PALABRA · עברית
-   Sistema visual derivado de la paleta del burro.
+   Sistema visual — Línea gráfica Congregación Beit Teshuvá
+   ───────────────────────────────────────────────────────────────
+   PALETA DE MARCA (única fuente de verdad)
+     #003b57  azul profundo   · tinta, superficies oscuras, nivel avanzado
+     #1d71b8  azul marca      · color interactivo primario
+     #0098e1  azul vivo       · realce, estado actual, degradado
+     #3dc0ff  cian claro      · SOLO decorativo o sobre fondo oscuro
+     #ffffff  blanco          · superficie base
+   REGLAS DE USO
+     · El cian #3dc0ff nunca lleva texto sobre blanco (contraste 2.06:1).
+     · El azul vivo #0098e1 solo en texto grande (≥24px) o como relleno.
+     · Neutros y azules de apoyo derivan del matiz 202° de #003b57.
+     · Verde y rojo son colores funcionales (acierto / error), no de marca:
+       se mantienen porque la señal instantánea es requisito de usabilidad.
+     · El dorado sobrevive únicamente en la ilustración: burro y trofeo.
+     · Todo par texto/fondo verificado ≥ 4.5:1 (AA); ≥ 3:1 en texto grande
+       y en límites de componente que indican estado.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Tomados directamente de los SVG del burro */
-  --burro-pelo: #96988d;
-  --burro-claro: #c0c1b8;
-  --burro-trazo: #53463b;
-  --burro-hocico: #eac09a;
-  --cuerda: #d9b435;
-  --cuerda-clara: #e3c94a;
-  --estaca: #735a47;
-  --pasto: #8fc044;
-  --pasto-hondo: #649344;
+  /* ── Marca ─────────────────────────────────────────────── */
+  --marca-profundo: #003b57;
+  --marca-azul: #1d71b8;
+  --marca-vivo: #0098e1;
+  --marca-cian: #3dc0ff;
 
-  /* Superficies */
-  --crema: #fbf6ec;
-  --crema-2: #f4ecdd;
+  --marca-azul-oscuro: #175d99;   /* hover del azul marca */
+  --marca-profundo-2: #002b40;    /* borde inferior de botón */
+
+  /* Degradado institucional a plena intensidad: solo donde NO hay texto
+     encima (filete de la barra y de la tarjeta). */
+  --degradado-marca: linear-gradient(135deg, #003b57 0%, #0098e1 100%);
+  /* Variante para superficies que sí llevan texto blanco: el extremo claro se
+     detiene en #0079b8 para que el blanco conserve 4.74:1 en todo el recorrido.
+     Con #0098e1 el botón caería a 3.19:1 y fallaría AA en tamaños pequeños. */
+  --degradado-marca-texto: linear-gradient(135deg, #003b57 0%, #0079b8 100%);
+  --degradado-marca-texto-hover: linear-gradient(135deg, #004d72 0%, #0089ce 100%);
+
+  /* ── Superficies ───────────────────────────────────────── */
   --papel: #ffffff;
-  --borde: #e7dcc6;
-  --borde-fuerte: #d3c4a7;
+  --lienzo: #f2f8fc;
+  --lienzo-2: #e6f1f9;
+  --lienzo-3: #d8e9f5;
 
-  /* Tinta */
-  --tinta: #2b2620;
-  --tinta-media: #6b6154;
-  --tinta-suave: #948977;
+  /* ── Bordes ────────────────────────────────────────────── */
+  --borde: #d9e8f3;         /* separación decorativa */
+  --borde-medio: #b0cee5;   /* contorno de componente */
+  --borde-fuerte: #5f92b5;  /* indicador de estado (3.35:1) */
 
-  /* Semántica */
-  --acierto: #4f9a34;
-  --acierto-suave: #e8f4de;
-  --error: #c8503a;
-  --error-suave: #fbe7e2;
+  /* ── Tinta ─────────────────────────────────────────────── */
+  --tinta: #003b57;         /* 11.91:1 sobre blanco */
+  --tinta-media: #3d6478;   /*  6.38:1 */
+  --tinta-suave: #4a6981;   /*  5.79:1 sobre blanco, 4.90:1 sobre el fondo de equipo mas claro */
 
+  /* ── Foco ──────────────────────────────────────────────── */
+  --foco: #0072ad;          /* 5.24:1 sobre blanco y sobre lienzo */
+
+  /* ── Semántica funcional ───────────────────────────────── */
+  --acierto: #0a7a52;
+  --acierto-tinta: #0a6b49;
+  --acierto-suave: #e2f5ee;
+  --acierto-borde: #6ec1a1;
+
+  --error: #c2323f;
+  --error-tinta: #a92a36;
+  --error-suave: #fdecee;
+  --error-borde: #e28d97;
+
+  /* ── Forma ─────────────────────────────────────────────── */
   --radio: 16px;
   --radio-s: 10px;
-  --sombra: 0 1px 2px rgba(43, 38, 32, .06), 0 8px 24px -12px rgba(43, 38, 32, .18);
-  --sombra-alta: 0 2px 4px rgba(43, 38, 32, .08), 0 24px 48px -20px rgba(43, 38, 32, .35);
+  --sombra: 0 1px 2px rgba(0, 59, 87, .06), 0 8px 24px -12px rgba(0, 59, 87, .20);
+  --sombra-alta: 0 2px 4px rgba(0, 59, 87, .10), 0 24px 48px -20px rgba(0, 59, 87, .38);
+  --sombra-marca: 0 8px 22px -12px rgba(29, 113, 184, .55);
 
   --ui: 'Outfit', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   --heb: 'Noto Serif Hebrew', 'David Libre', 'David', 'Frank Ruehl CLM', 'Times New Roman', 'Arial Hebrew', serif;
@@ -56,9 +93,9 @@ body {
   font-family: var(--ui);
   color: var(--tinta);
   background:
-    radial-gradient(1200px 700px at 78% -10%, #fdf6e4 0%, transparent 60%),
-    radial-gradient(900px 600px at 5% 110%, #eef4e2 0%, transparent 55%),
-    var(--crema);
+    radial-gradient(1200px 700px at 78% -10%, #dcefff 0%, transparent 62%),
+    radial-gradient(900px 620px at 5% 110%, #e2f1fb 0%, transparent 58%),
+    var(--lienzo);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -66,7 +103,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 button:disabled { cursor: default; }
 
 :focus-visible {
-  outline: 3px solid var(--cuerda);
+  outline: 3px solid var(--foco);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -118,15 +155,26 @@ button:disabled { cursor: default; }
 /* ───────────────────────── Barra superior ───────────────────── */
 
 .barra {
+  position: relative;
   display: flex;
   align-items: center;
   gap: clamp(12px, 2vw, 28px);
-  padding: clamp(8px, 1.1vh, 14px) clamp(12px, 1.6vw, 22px);
+  padding: clamp(10px, 1.2vh, 16px) clamp(12px, 1.6vw, 22px) clamp(8px, 1.1vh, 14px);
   background: var(--papel);
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
   flex-wrap: wrap;
+  overflow: hidden;
+}
+
+/* Firma de marca: el degradado institucional corona la interfaz. */
+.barra::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--degradado-marca);
 }
 
 .marca { display: flex; align-items: center; gap: 12px; min-width: 0; }
@@ -137,7 +185,8 @@ button:disabled { cursor: default; }
   flex: none;
   display: grid;
   place-items: center;
-  background: var(--crema-2);
+  background: var(--lienzo-2);
+  border: 1px solid var(--borde);
   border-radius: 12px;
 }
 .marca__icono svg { width: 68%; height: 68%; }
@@ -148,6 +197,7 @@ button:disabled { cursor: default; }
   font-size: clamp(13px, 1.15vw, 17px);
   letter-spacing: .02em;
   white-space: nowrap;
+  color: var(--tinta);
 }
 .marca__sub {
   font-size: clamp(10px, .78vw, 12px);
@@ -159,6 +209,7 @@ button:disabled { cursor: default; }
 
 .barra__centro { flex: 1; display: flex; align-items: center; gap: 14px; min-width: 220px; flex-wrap: wrap; }
 
+/* El nivel escala en profundidad de azul: claro = fácil, profundo = avanzado. */
 .nivel-chip {
   display: inline-flex;
   align-items: center;
@@ -170,9 +221,9 @@ button:disabled { cursor: default; }
   white-space: nowrap;
   border: 1px solid;
 }
-.nivel-chip[data-nivel="facil"]      { background: #eaf5e2; border-color: #cbe6b7; color: #3f7a29; }
-.nivel-chip[data-nivel="intermedio"] { background: #fdf1d8; border-color: #f0dcac; color: #97701a; }
-.nivel-chip[data-nivel="avanzado"]   { background: #f0ecfa; border-color: #d9d0f0; color: #5a4a97; }
+.nivel-chip[data-nivel="facil"]      { background: #e2f4ff; border-color: #a9dcfa; color: #0b6d9e; }
+.nivel-chip[data-nivel="intermedio"] { background: #e6f0fa; border-color: #b3d2ec; color: #175d99; }
+.nivel-chip[data-nivel="avanzado"]   { background: #e3edf4; border-color: #9dbdd0; color: #003b57; }
 
 .progreso { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; flex-wrap: wrap; }
 
@@ -182,16 +233,16 @@ button:disabled { cursor: default; }
   width: clamp(8px, .72vw, 11px);
   height: clamp(8px, .72vw, 11px);
   border-radius: 50%;
-  background: var(--crema-2);
-  border: 1px solid var(--borde-fuerte);
+  background: var(--lienzo-2);
+  border: 1px solid var(--borde-medio);
   transition: var(--transicion);
 }
-.progreso__punto[data-estado="hecha"]  { background: var(--pasto); border-color: var(--pasto-hondo); }
+.progreso__punto[data-estado="hecha"]  { background: var(--marca-azul); border-color: var(--marca-azul-oscuro); }
 .progreso__punto[data-estado="actual"] {
-  background: var(--cuerda);
-  border-color: #b8942a;
+  background: var(--marca-vivo);
+  border-color: var(--marca-azul);
   transform: scale(1.45);
-  box-shadow: 0 0 0 3px rgba(217, 180, 53, .22);
+  box-shadow: 0 0 0 3px rgba(0, 152, 225, .24);
 }
 
 .progreso__texto {
@@ -201,20 +252,66 @@ button:disabled { cursor: default; }
   white-space: nowrap;
 }
 
-.barra__acciones { display: flex; gap: 8px; }
+.barra__acciones { display: flex; gap: 8px; align-items: center; }
+
+/* Interruptor de sonido. El icono cambia de forma, no solo de color: el
+   estado tiene que leerse desde el fondo del salón y sin distinguir matices. */
+.btn-sonido {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px 7px 11px;
+  border-radius: 999px;
+  font-size: clamp(11px, .85vw, 13px);
+  font-weight: 600;
+  color: var(--marca-azul-oscuro);
+  background: var(--lienzo-2);
+  border: 1px solid var(--borde-medio);
+  transition: var(--transicion);
+  white-space: nowrap;
+}
+.btn-sonido svg {
+  width: clamp(15px, 1.25vw, 18px);
+  height: clamp(15px, 1.25vw, 18px);
+  flex: none;
+  stroke: currentColor;
+}
+.btn-sonido:hover { background: var(--papel); border-color: var(--marca-azul); color: var(--marca-profundo); }
+
+/* Esperando el gesto que el navegador exige para poder sonar. Late despacio
+   para pedir el clic sin competir con el juego; en cuanto alguien toca la
+   página desaparece. Sin este aviso el silencio inicial parece una avería. */
+.btn-sonido--espera {
+  color: var(--marca-azul-oscuro);
+  background: var(--papel);
+  border-color: var(--marca-vivo);
+  animation: sonidoEspera 1.9s ease-in-out infinite;
+}
+@keyframes sonidoEspera {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 152, 225, .34); }
+  55%      { box-shadow: 0 0 0 7px rgba(0, 152, 225, 0); }
+}
+
+/* Silenciado: se apaga a neutro para que "encendido" sea el estado con color. */
+.btn-sonido[aria-pressed="false"] {
+  color: var(--tinta-suave);
+  background: var(--papel);
+  border-style: dashed;
+}
+.btn-sonido[aria-pressed="false"]:hover { color: var(--tinta); border-color: var(--borde-fuerte); }
 
 .btn-discreto {
   padding: 8px 14px;
   border-radius: 999px;
   font-size: clamp(11px, .85vw, 13px);
   font-weight: 600;
-  color: var(--tinta-media);
-  border: 1px solid var(--borde);
-  background: var(--crema);
+  color: var(--marca-azul-oscuro);
+  border: 1px solid var(--borde-medio);
+  background: var(--papel);
   transition: var(--transicion);
   white-space: nowrap;
 }
-.btn-discreto:hover { background: var(--crema-2); color: var(--tinta); border-color: var(--borde-fuerte); }
+.btn-discreto:hover { background: var(--lienzo-2); color: var(--marca-profundo); border-color: var(--marca-azul); }
 
 /* ───────────────────────── Turno ────────────────────────────── */
 
@@ -261,11 +358,11 @@ button:disabled { cursor: default; }
   font-size: clamp(28px, 3.2vw, 52px);
   font-weight: 800;
   line-height: 1.5;
-  color: var(--color-equipo);
+  color: var(--color-tinta);
 }
 
 .turno__latino { display: flex; flex-direction: column; line-height: 1.25; }
-.turno__translit { font-size: clamp(15px, 1.35vw, 22px); font-weight: 700; }
+.turno__translit { font-size: clamp(15px, 1.35vw, 22px); font-weight: 700; color: var(--tinta); }
 .turno__es { font-size: clamp(11px, .9vw, 14px); color: var(--tinta-suave); font-weight: 600; }
 
 /* ───────────────────────── Palabra ──────────────────────────── */
@@ -280,8 +377,7 @@ button:disabled { cursor: default; }
   min-height: clamp(150px, 21vh, 260px);
   overflow: hidden;
   position: relative;
-  background:
-    linear-gradient(180deg, #fff 0%, #fffdf8 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbfe 100%);
 }
 
 .palabra__pista {
@@ -327,10 +423,11 @@ button:disabled { cursor: default; }
   transition: background var(--transicion), border-color var(--transicion);
 }
 
-/* Hueco por descubrir: casilla visible, para que se lea la forma de la palabra */
+/* Hueco por descubrir: casilla visible, para que se lea la forma de la palabra.
+   El subrayado usa --borde-fuerte porque es el único indicador de "falta letra". */
 .ficha--oculta {
-  background: linear-gradient(180deg, #fdfaf3 0%, #f5eddd 100%);
-  box-shadow: inset 0 0 0 1.5px var(--borde), inset 0 -4px 0 -1px var(--borde-fuerte);
+  background: linear-gradient(180deg, #f7fbfe 0%, #e6f1f9 100%);
+  box-shadow: inset 0 0 0 1.5px var(--borde-medio), inset 0 -4px 0 -1px var(--borde-fuerte);
 }
 
 .ficha--oculta > span { visibility: hidden; }
@@ -402,7 +499,7 @@ button:disabled { cursor: default; }
   grid-template-columns: repeat(11, minmax(0, 1fr));
   margin-top: clamp(5px, .7vh, 9px);
   padding-top: clamp(6px, .8vh, 11px);
-  border-top: 1px dashed var(--borde);
+  border-top: 1px dashed var(--borde-medio);
 }
 
 .tecla {
@@ -415,34 +512,35 @@ button:disabled { cursor: default; }
   line-height: 1;
   color: var(--tinta);
   background: var(--papel);
-  border: 1.5px solid var(--borde);
+  border: 1.5px solid var(--borde-medio);
   border-radius: var(--radio-s);
-  box-shadow: 0 2px 0 var(--borde);
-  transition: transform 110ms ease, background var(--transicion), border-color var(--transicion), box-shadow 110ms ease;
+  box-shadow: 0 2px 0 var(--lienzo-3);
+  transition: transform 110ms ease, background var(--transicion), border-color var(--transicion), box-shadow 110ms ease, color var(--transicion);
 }
 
 .tecla:hover:not(:disabled) {
-  background: var(--crema);
-  border-color: var(--cuerda);
+  background: var(--lienzo);
+  color: var(--marca-azul-oscuro);
+  border-color: var(--marca-vivo);
   transform: translateY(-2px);
-  box-shadow: 0 4px 0 #e2d4ab;
+  box-shadow: 0 4px 0 #bfdff2;
 }
 
-.tecla:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 0 var(--borde); }
+.tecla:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 0 var(--lienzo-3); }
 
 .tecla--acierto {
   background: var(--acierto-suave);
-  border-color: #a8d492;
-  color: #35701f;
+  border-color: var(--acierto-borde);
+  color: var(--acierto-tinta);
   box-shadow: none;
   animation: teclaAcierto 420ms cubic-bezier(.2, .9, .3, 1);
 }
 .tecla--error {
   background: var(--error-suave);
-  border-color: #e7b3a7;
-  color: #a53e2b;
+  border-color: var(--error-borde);
+  color: var(--error-tinta);
   box-shadow: none;
-  opacity: .78;
+  opacity: .82;
   animation: teclaError 420ms cubic-bezier(.36, .07, .19, .97);
 }
 @keyframes teclaAcierto {
@@ -453,13 +551,13 @@ button:disabled { cursor: default; }
 }
 
 .tecla--finales {
-  background: var(--crema);
+  background: var(--lienzo);
   border-style: dashed;
 }
 .tecla--finales.tecla--acierto { background: var(--acierto-suave); border-style: solid; }
 .tecla--finales.tecla--error   { background: var(--error-suave); border-style: solid; }
 
-.tecla:disabled:not(.tecla--acierto):not(.tecla--error) { opacity: .35; }
+.tecla:disabled:not(.tecla--acierto):not(.tecla--error) { opacity: .38; }
 
 /* ───────────────────────── Burro ────────────────────────────── */
 
@@ -468,9 +566,11 @@ button:disabled { cursor: default; }
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1vh, 14px);
-  background: linear-gradient(180deg, #fff 0%, #fbfdf6 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbfe 100%);
 }
 
+/* Escena en azules muy claros: la ilustración dorada del burro es el único
+   acento cálido de la pantalla, así que el fondo debe cederle todo el peso. */
 .burro-escena {
   position: relative;
   width: 100%;
@@ -480,9 +580,9 @@ button:disabled { cursor: default; }
   overflow: hidden;
   border-radius: 13px;
   background:
-    radial-gradient(120% 78% at 50% 108%, #eaf1dc 0%, #f3f6e9 42%, transparent 72%),
-    linear-gradient(180deg, #fbfcf6 0%, #f7faee 100%);
-  box-shadow: inset 0 0 0 1px #e9eeda;
+    radial-gradient(120% 78% at 50% 108%, #d3e9f8 0%, #eaf5fc 42%, transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f4fafe 100%);
+  box-shadow: inset 0 0 0 1px var(--borde);
 }
 
 /* Horizonte suave, para que la escena tenga suelo aun sin pasto */
@@ -491,7 +591,7 @@ button:disabled { cursor: default; }
   position: absolute;
   left: 0; right: 0; bottom: 21%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #dde5c8 18%, #dde5c8 82%, transparent);
+  background: linear-gradient(90deg, transparent, #c6dfef 18%, #c6dfef 82%, transparent);
 }
 
 .burro-escena svg { width: 100%; height: 100%; display: block; }
@@ -530,12 +630,83 @@ button:disabled { cursor: default; }
   100% { opacity: 0; transform: translateX(-24px) scale(1.5); }
 }
 
+/* ── Moscas (solo al perder la ronda) ──────────────────────────
+   Van dibujadas dentro del mismo viewBox que el burro, así que su tamaño y
+   sus órbitas escalan solos con la escena. Cada mosca tiene tres capas:
+   entrada (opacidad), vuelo (órbita elíptica) y cuerpo (escala + balanceo).
+   Las alas aletean aparte, mucho más rápido. */
+
+.burro-escena__moscas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mosca__entra {
+  opacity: 0;
+  animation: moscaEntra 620ms ease-out forwards;
+  animation-delay: var(--retardo, 0s);
+}
+@keyframes moscaEntra { to { opacity: 1; } }
+
+/* Órbita elíptica aproximada con ocho pasos; --rx y --ry la ensanchan. */
+.mosca__vuelo {
+  animation: moscaOrbita var(--dur, 4.5s) linear infinite;
+}
+@keyframes moscaOrbita {
+  0%     { transform: translate(calc(var(--rx) *  1),     calc(var(--ry) *  0)); }
+  12.5%  { transform: translate(calc(var(--rx) *  .707),  calc(var(--ry) *  .707)); }
+  25%    { transform: translate(calc(var(--rx) *  0),     calc(var(--ry) *  1)); }
+  37.5%  { transform: translate(calc(var(--rx) * -.707),  calc(var(--ry) *  .707)); }
+  50%    { transform: translate(calc(var(--rx) * -1),     calc(var(--ry) *  0)); }
+  62.5%  { transform: translate(calc(var(--rx) * -.707),  calc(var(--ry) * -.707)); }
+  75%    { transform: translate(calc(var(--rx) *  0),     calc(var(--ry) * -1)); }
+  87.5%  { transform: translate(calc(var(--rx) *  .707),  calc(var(--ry) * -.707)); }
+  100%   { transform: translate(calc(var(--rx) *  1),     calc(var(--ry) *  0)); }
+}
+
+.mosca__cuerpo-g {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: moscaBalanceo 1.15s ease-in-out infinite;
+}
+@keyframes moscaBalanceo {
+  0%, 100% { transform: scale(var(--escala, 1)) rotate(-11deg); }
+  50%      { transform: scale(var(--escala, 1)) rotate(11deg); }
+}
+
+/* Aleteo: los tres fotogramas de Mosca_1/2/3 se turnan. Cada uno está visible
+   un tercio del ciclo, con un corte seco —no un fundido—, que es como
+   funciona la animación por fotogramas de toda la vida. */
+.mosca__cuadro {
+  opacity: 0;
+  animation: moscaCuadro var(--aleteo, .21s) steps(1, end) infinite;
+  animation-delay: calc(var(--aleteo, .21s) * var(--indice) / 3);
+}
+@keyframes moscaCuadro {
+  0%,      33.32% { opacity: 1; }
+  33.33%, 100%    { opacity: 0; }
+}
+
+/* Con movimiento reducido las moscas se quedan quietas en su órbita: se ve
+   que están ahí, sin el zumbido que puede molestar a quien lo pidió.
+   El primer fotograma se fija visible; si no, la regla global que congela las
+   animaciones dejaría los tres a cero y las moscas desaparecerían. */
+@media (prefers-reduced-motion: reduce) {
+  .mosca__entra { opacity: 1; }
+  .mosca__cuadro { opacity: 0; }
+  .mosca__cuadro:first-of-type { opacity: 1; }
+}
+
+/* Rótulo y números centrados bajo la escena, en todos los tamaños: la caja
+   del burro y su contador se leen como una sola pieza, de arriba abajo. */
 .intentos {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 0 clamp(4px, .6vw, 8px);
+  gap: clamp(5px, .7vh, 9px);
+  padding: 0 clamp(4px, .6vw, 8px) 2px;
 }
 
 .intentos__etiqueta {
@@ -546,25 +717,33 @@ button:disabled { cursor: default; }
   color: var(--tinta-suave);
 }
 
-.intentos__marcas { display: flex; gap: clamp(4px, .5vw, 8px); }
+.intentos__marcas { display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(4px, .5vw, 8px); }
 
+/* Cada intento se numera: dice cuántos van y cuántos quedan de un vistazo,
+   cosa que seis siluetas repetidas no podían decir. El estado no depende
+   solo del color — el número gastado además se pone en negrita. */
 .intentos__marca {
-  width: clamp(20px, 1.9vw, 30px);
-  height: clamp(20px, 1.9vw, 30px);
+  width: clamp(22px, 2vw, 32px);
+  height: clamp(22px, 2vw, 32px);
   border-radius: 8px;
   display: grid;
   place-items: center;
-  background: var(--crema-2);
-  border: 1px solid var(--borde);
+  font-size: clamp(11px, 1vw, 15px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--tinta-suave);
+  background: var(--lienzo-2);
+  border: 1px solid var(--borde-medio);
   transition: var(--transicion);
 }
-.intentos__marca svg { width: 66%; height: 66%; opacity: .3; transition: var(--transicion); }
 .intentos__marca[data-usado="si"] {
   background: var(--error-suave);
-  border-color: #e7b3a7;
+  border-color: var(--error-borde);
+  color: var(--error-tinta);
+  font-weight: 800;
   animation: marcaEntra 400ms cubic-bezier(.2, .9, .3, 1.3);
 }
-.intentos__marca[data-usado="si"] svg { opacity: 1; }
 @keyframes marcaEntra { 0% { transform: scale(.4) rotate(-18deg); } 100% { transform: none; } }
 
 /* ───────────────────────── Marcador ─────────────────────────── */
@@ -601,9 +780,15 @@ button:disabled { cursor: default; }
 .equipo[data-turno="si"] {
   border-color: var(--color-equipo);
   background: var(--color-suave);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-equipo) 14%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-equipo) 16%, transparent);
 }
 
+/* Ficha numerada de equipo.
+   Tres azules seguidos se confunden en un proyector, así que la ficha suma
+   un segundo eje de diferencia — el tratamiento — que sobrevive incluso en
+   escala de grises: relleno oscuro → relleno medio → perfilado claro.
+   El relleno usa --color-tinta (no --color-equipo) para que el número blanco
+   mantenga 4.5:1 también en el equipo del azul más claro. */
 .equipo__ficha {
   width: clamp(26px, 2.4vw, 36px);
   height: clamp(26px, 2.4vw, 36px);
@@ -613,8 +798,15 @@ button:disabled { cursor: default; }
   font-weight: 800;
   font-size: clamp(12px, 1.1vw, 16px);
   color: #fff;
-  background: var(--color-equipo);
+  background: var(--color-tinta);
+  border: 2px solid transparent;
   flex: none;
+}
+.equipo__ficha[data-tono="claro"] {
+  background: var(--color-suave);
+  border-color: var(--color-equipo);
+  color: var(--color-tinta);
+  box-shadow: inset 0 0 0 2px #fff;
 }
 
 .equipo__nombres { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.3; }
@@ -642,7 +834,7 @@ button:disabled { cursor: default; }
   font-size: clamp(19px, 2vw, 32px);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: var(--color-equipo);
+  color: var(--color-tinta);
   line-height: 1;
 }
 .equipo__puntos small { font-size: .42em; font-weight: 700; color: var(--tinta-suave); margin-inline-start: 3px; }
@@ -661,13 +853,14 @@ button:disabled { cursor: default; }
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(38, 33, 26, .52);
+  background: rgba(0, 33, 49, .58);
   backdrop-filter: blur(7px);
   animation: capaEntra 260ms ease-out;
 }
 @keyframes capaEntra { from { opacity: 0; } to { opacity: 1; } }
 
 .tarjeta {
+  position: relative;
   width: min(920px, 100%);
   max-height: 92vh;
   overflow: auto;
@@ -675,7 +868,7 @@ button:disabled { cursor: default; }
   border-radius: 26px;
   border: 1px solid var(--borde);
   box-shadow: var(--sombra-alta);
-  padding: clamp(22px, 4vh, 46px) clamp(20px, 3.4vw, 54px);
+  padding: clamp(26px, 4.4vh, 50px) clamp(20px, 3.4vw, 54px) clamp(22px, 4vh, 46px);
   text-align: center;
   animation: tarjetaEntra 460ms cubic-bezier(.2, .9, .28, 1.15);
 }
@@ -684,14 +877,28 @@ button:disabled { cursor: default; }
   to   { opacity: 1; transform: none; }
 }
 
+/* Misma firma de marca que la barra superior: cierra el sistema. */
+.tarjeta::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  border-radius: 26px 26px 0 0;
+  background: var(--degradado-marca);
+}
+
 .tarjeta__grito {
   font-size: clamp(28px, 4.4vw, 62px);
   font-weight: 800;
   letter-spacing: -.01em;
   margin: 0 0 clamp(4px, .8vh, 10px);
 }
-.tarjeta__grito--bien { color: var(--acierto); }
-.tarjeta__grito--mal  { color: var(--estaca); }
+/* Verde solo cuando significa "respuesta correcta". */
+.tarjeta__grito--bien { color: var(--acierto-tinta); }
+/* El cierre de la partida no es un acierto, es una celebración: azul de marca. */
+.tarjeta__grito--campeon { color: var(--marca-profundo); }
+/* Ronda perdida: azul sereno, no rojo. No se castiga al equipo, se pasa turno. */
+.tarjeta__grito--mal  { color: var(--tinta-media); }
 
 .tarjeta__sub {
   font-size: clamp(13px, 1.15vw, 18px);
@@ -705,7 +912,7 @@ button:disabled { cursor: default; }
   flex-direction: column;
   gap: clamp(6px, 1vh, 12px);
   padding: clamp(16px, 2.6vh, 30px) clamp(14px, 2vw, 28px);
-  background: var(--crema);
+  background: var(--lienzo);
   border: 1px solid var(--borde);
   border-radius: 18px;
   margin-bottom: clamp(16px, 2.4vh, 28px);
@@ -723,8 +930,7 @@ button:disabled { cursor: default; }
 .respuesta__translit {
   font-size: clamp(14px, 1.35vw, 22px);
   font-weight: 700;
-  color: var(--cuerda);
-  filter: brightness(.82);
+  color: var(--marca-azul-oscuro);
 }
 .respuesta__es { font-size: clamp(13px, 1.15vw, 19px); color: var(--tinta-media); font-weight: 600; }
 .respuesta__ref {
@@ -734,6 +940,8 @@ button:disabled { cursor: default; }
   font-weight: 700;
   color: var(--tinta-suave);
 }
+
+/* ───────────────────────── Botones ──────────────────────────── */
 
 .btn {
   display: inline-flex;
@@ -745,24 +953,29 @@ button:disabled { cursor: default; }
   font-size: clamp(14px, 1.2vw, 19px);
   font-weight: 700;
   color: #fff;
-  background: var(--tinta);
-  box-shadow: 0 4px 0 #171310, var(--sombra);
+  background: var(--marca-azul);
+  box-shadow: 0 4px 0 var(--marca-azul-oscuro), var(--sombra);
   transition: transform 120ms ease, box-shadow 120ms ease, background var(--transicion);
 }
-.btn:hover { background: #3c3529; transform: translateY(-2px); box-shadow: 0 6px 0 #171310, var(--sombra-alta); }
-.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #171310; }
+.btn:hover { background: var(--marca-azul-oscuro); transform: translateY(-2px); box-shadow: 0 6px 0 #114a7d, var(--sombra-alta); }
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--marca-azul-oscuro); }
 
-.btn--oro { background: var(--cuerda); color: #33280a; box-shadow: 0 4px 0 #a8861f, var(--sombra); }
-.btn--oro:hover { background: var(--cuerda-clara); box-shadow: 0 6px 0 #a8861f, var(--sombra-alta); }
-.btn--oro:active { box-shadow: 0 1px 0 #a8861f; }
+/* Acción destacada: el degradado institucional. Sustituye al antiguo botón oro. */
+.btn--destacado {
+  background: var(--degradado-marca-texto);
+  color: #fff;
+  box-shadow: 0 4px 0 var(--marca-profundo-2), var(--sombra-marca);
+}
+.btn--destacado:hover { background: var(--degradado-marca-texto-hover); box-shadow: 0 6px 0 var(--marca-profundo-2), var(--sombra-alta); }
+.btn--destacado:active { box-shadow: 0 1px 0 var(--marca-profundo-2); }
 
 .btn--fantasma {
   background: transparent;
-  color: var(--tinta-media);
-  border: 1.5px solid var(--borde-fuerte);
+  color: var(--marca-azul-oscuro);
+  border: 1.5px solid var(--borde-medio);
   box-shadow: none;
 }
-.btn--fantasma:hover { background: var(--crema); color: var(--tinta); transform: none; box-shadow: none; }
+.btn--fantasma:hover { background: var(--lienzo-2); color: var(--marca-profundo); border-color: var(--marca-azul); transform: none; box-shadow: none; }
 
 .acciones { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
@@ -787,9 +1000,12 @@ button:disabled { cursor: default; }
 
 .ganadores { display: flex; flex-direction: column; gap: 12px; margin: clamp(14px, 2.4vh, 28px) 0; }
 
+/* La ficha numerada se repite aquí: en la pantalla final los tres equipos
+   aparecen juntos y sus tres azules claros de fondo son casi idénticos,
+   así que el color por sí solo no distinguiría a los ganadores. */
 .ganador {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
   gap: clamp(12px, 1.6vw, 22px);
   padding: clamp(12px, 1.8vh, 20px) clamp(16px, 2vw, 26px);
@@ -810,16 +1026,23 @@ button:disabled { cursor: default; }
   font-size: clamp(26px, 3.2vw, 50px);
   font-weight: 800;
   line-height: 1.5;
-  color: var(--color-equipo);
+  color: var(--color-tinta);
   text-align: right;
 }
+.ganador .equipo__ficha {
+  width: clamp(30px, 2.8vw, 42px);
+  height: clamp(30px, 2.8vw, 42px);
+  font-size: clamp(14px, 1.3vw, 19px);
+  border-radius: 11px;
+}
+
 .ganador__latino { text-align: left; }
-.ganador__translit { font-size: clamp(14px, 1.3vw, 21px); font-weight: 700; }
+.ganador__translit { font-size: clamp(14px, 1.3vw, 21px); font-weight: 700; color: var(--tinta); }
 .ganador__es { font-size: clamp(11px, .9vw, 14px); color: var(--tinta-suave); font-weight: 600; }
 .ganador__puntos {
   font-size: clamp(24px, 2.8vw, 44px);
   font-weight: 800;
-  color: var(--color-equipo);
+  color: var(--color-tinta);
   font-variant-numeric: tabular-nums;
 }
 
@@ -832,9 +1055,10 @@ button:disabled { cursor: default; }
   gap: 14px;
   padding: 9px 16px;
   border-radius: 12px;
-  background: var(--crema);
+  background: var(--lienzo);
   border: 1px solid var(--borde);
   font-weight: 700;
+  color: var(--tinta);
 }
 .tabla-final__pos { color: var(--tinta-suave); font-size: 13px; width: 24px; }
 .tabla-final__nombre { text-align: left; display: flex; align-items: baseline; gap: 10px; }
@@ -859,36 +1083,128 @@ button:disabled { cursor: default; }
 
 /* ───────────────────────── Responsive ───────────────────────── */
 
+/* ── Tablet y móvil: una sola columna, con el burro ARRIBA ────
+   En dos columnas el burro va al lado; al apilarse caía debajo del teclado,
+   fuera de pantalla, y el burro es justo el medidor de tensión: sin verlo no
+   se sabe cuánto falta para perder la ronda.
+
+   Las dos columnas dejan de existir como cajas (`display: contents`) para que
+   sus paneles pasen a ser hermanos y se puedan reordenar uno a uno. El orden
+   sigue lo que necesita el jugador en cada momento: de quién es el turno →
+   cómo va la ronda (burro) → qué hay que adivinar → con qué se juega. El
+   marcador va al final porque se consulta entre rondas, no durante. */
 @media (max-width: 1080px) {
-  .tablero { grid-template-columns: 1fr; align-items: start; }
-  .burro-panel { flex: none; }
-  .burro-escena { flex: none; }
-  .columna--lateral { flex-direction: column; }
-  .burro-escena { max-height: none; }
-  .burro-escena { aspect-ratio: 1693 / 900; }
+  .tablero {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.3vh, 18px);
+  }
+  .columna, .columna--lateral { display: contents; }
+
+  .turno       { order: 1; }
+  .burro-panel { order: 2; }
+  .palabra     { order: 3; }
+  .teclado     { order: 4; }
+  .marcador    { order: 5; }
+
+  /* El burro con los intentos centrados justo debajo: la escena y su
+     contador leídos como una sola pieza, de arriba abajo.
+     La escena se dimensiona por ALTURA, no por porcentaje de ancho: a 1024 px
+     un porcentaje la disparaba a 550 px de alto y empujaba el teclado dos
+     pantallas abajo. Los seis números van en UNA fila —no en dos— porque así
+     se leen como un medidor y cuestan una sola línea de alto. */
+  .burro-panel {
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(6px, .9vh, 12px);
+  }
+  .burro-escena {
+    flex: none;
+    width: auto;
+    max-width: 100%;
+    height: clamp(96px, 15vh, 180px);
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 1693 / 1476;
+  }
+  .intentos {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+  }
+  .intentos__marcas {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(5px, 1.6vw, 8px);
+  }
+  .intentos__marca {
+    width: clamp(28px, 8.2vw, 38px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
   .app { padding-bottom: 20px; }
 }
 
 @media (max-width: 780px) {
-  .app { padding-left: 10px; padding-right: 10px; }
-  .barra { gap: 10px; padding: 10px 12px; }
+  /* En vertical cada píxel cuenta: los huecos generosos del proyector aquí
+     son lo que empuja el teclado fuera de pantalla. */
+  .app { padding-left: 10px; padding-right: 10px; gap: 9px; }
+  .tablero { gap: 9px; }
+  .barra { gap: 10px; padding: 10px 12px 9px; }
   .barra__acciones { margin-inline-start: auto; }
   .barra__centro { order: 3; flex: 1 0 100%; width: 100%; min-width: 0; }
   .barra { row-gap: 8px; }
   .progreso { flex-wrap: nowrap; }
   .progreso__puntos { flex-wrap: nowrap; }
   .marca__sub { display: none; }
-  .turno { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .turno__etiqueta { font-size: 10px; }
+  /* En móvil el botón se queda en el icono: el texto no cabe junto a "Reiniciar".
+     El aviso de "toca para el sonido" sí se mantiene, porque ahí sí hace falta. */
+  .btn-sonido__texto { display: none; }
+  .btn-sonido--espera .btn-sonido__texto { display: inline; }
+  .btn-sonido { padding: 7px 10px; }
+  /* El turno pasa a una sola línea: es un dato que cambia una vez por ronda
+     y en vertical se comía la altura que necesitan la palabra y el teclado. */
+  .turno {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px 8px 18px;
+  }
+  .turno__etiqueta {
+    font-size: 9px;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    flex: none;
+  }
+  .turno__nombres { gap: 10px; align-items: center; flex: 1; }
+  .turno__hebreo { font-size: 30px; line-height: 1.35; }
+  .turno__translit { font-size: 16px; }
+  .turno__es { font-size: 11px; }
+
+  .burro-panel { padding: 9px 12px 11px; }
+  .intentos__etiqueta { font-size: 10px; }
+  .intentos__marca { font-size: 14px; }
+
   .frase { gap: 12px 16px; }
-  .palabra { min-height: auto; padding: 18px 12px 22px; }
-  .burro-escena { min-height: 150px; }
+  .palabra { min-height: auto; padding: 14px 12px 18px; }
+  .teclado { padding: 9px 10px 11px; }
+  .teclado__titulo { margin-bottom: 6px; font-size: 10px; }
+  /* Teclas menos altas que anchas: cinco filas de teclado hebreo no caben de
+     otra forma. 44 px de alto es el mínimo táctil recomendado y se respeta. */
+  .tecla { aspect-ratio: 1 / .82; }
   .teclado__grupo { grid-template-columns: repeat(8, minmax(0, 1fr)); }
   .teclado__grupo--finales { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  .burro-escena { aspect-ratio: 1693 / 1100; }
   .equipo__latino { font-size: 11px; }
-  .tarjeta { padding: 22px 16px; border-radius: 20px; }
+  .tarjeta { padding: 26px 16px 22px; border-radius: 20px; }
+  .tarjeta::before { border-radius: 20px 20px 0 0; }
 }
+
 
 @media (max-width: 460px) {
   .teclado__grupo, .teclado__grupo--finales { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -896,5 +1212,84 @@ button:disabled { cursor: default; }
   /* En pantallas muy estrechas los puntos de progreso sobran: basta el texto. */
   .progreso__puntos { display: none; }
   .progreso__texto { white-space: normal; }
-  .marca__titulo { font-size: 13px; }
+
+  /* El título del juego se va: quien tiene el teléfono en la mano ya sabe a
+     qué está jugando, y esa línea costaba una fila entera de barra. El icono
+     se queda como marca. */
+  .marca__texto { display: none; }
+  .barra { padding: 8px 10px 8px; gap: 8px; }
+  .marca__icono { width: 30px; height: 30px; }
+
+  .turno { padding: 7px 12px 7px 16px; gap: 8px; }
+  .turno__hebreo { font-size: 27px; }
+  .turno__etiqueta { font-size: 8px; letter-spacing: .08em; }
+
+  /* En el teléfono el aviso de sonido se queda en el icono que late: el texto
+     "Toca para el sonido" empujaba "Reiniciar partida" a una tercera fila de
+     barra, y en vertical eso cuesta más de lo que aclara. Además, en un móvil
+     la primera pulsación llega enseguida: el estado se resuelve solo. */
+  .btn-sonido--espera .btn-sonido__texto { display: none; }
+  .btn-sonido, .btn-discreto { padding: 7px 11px; font-size: 12px; }
+
+  /* Sin el título, el nivel y el número de ronda suben a la primera fila
+     junto al icono: si no, quedaba un hueco vacío enorme a la izquierda y los
+     dos botones solos a la derecha. Los botones bajan a la segunda fila, que
+     es donde deben estar: son acciones secundarias, no información. */
+  .barra__centro { order: 1; flex: 1 1 auto; min-width: 0; width: auto; gap: 10px; }
+  .barra__acciones { order: 2; flex: 1 0 100%; justify-content: flex-end; margin-inline-start: 0; }
+
+  .burro-panel { padding: 9px 10px; gap: 10px; }
+  .tecla { aspect-ratio: 1 / .8; font-size: 19px; }
+}
+
+/* ── Teléfonos de pantalla baja ───────────────────────────────
+   Aquí no manda el ancho sino el ALTO disponible. En un teléfono de 667 px el
+   conjunto barra + turno + burro + palabra + teclado hebreo de cinco filas no
+   entra sin apretar algo, así que se aprieta lo prescindible —huecos, relleno
+   y altura de tecla— y nunca el burro ni la palabra, que son la información
+   del juego. Las teclas se quedan por encima de 42 px de alto: por debajo se
+   empieza a fallar el objetivo con el pulgar. */
+@media (max-width: 1080px) and (max-height: 800px) {
+  .app { gap: 7px; padding-top: 10px; padding-bottom: 12px; }
+  .tablero { gap: 7px; }
+  .burro-panel { padding: 8px 10px 10px; gap: 5px; }
+  .burro-escena { height: clamp(84px, 12vh, 130px); }
+  .palabra { padding: 10px 10px 14px; }
+  .teclado { padding: 8px 9px 10px; }
+  .teclado__titulo { margin-bottom: 4px; font-size: 9px; }
+  .tecla { aspect-ratio: 1 / .76; }
+}
+
+/* Por debajo de 690 px de alto, el rótulo del teclado también sobra: las
+   teclas ya se explican solas y el contador de usadas es un lujo. */
+@media (max-width: 1080px) and (max-height: 690px) {
+  .teclado__titulo { display: none; }
+  /* Aquí NO se rompe el apilado del contador: el rótulo se queda encima de
+     los números y todo centrado bajo la escena, como en el resto de tamaños.
+     Los píxeles que hacían falta salen del relleno de la palabra y de los
+     huecos, que no son información. */
+  .burro-escena { height: clamp(72px, 11vh, 110px); }
+  .burro-panel { padding: 7px 10px 8px; gap: 4px; }
+  .intentos { gap: 4px; }
+  .intentos__marca { width: 29px; }
+  .palabra { padding: 9px 10px 11px; }
+  .app { gap: 6px; padding-bottom: 10px; }
+  .tablero { gap: 6px; }
+  .turno__hebreo { font-size: 24px; }
+  .turno { padding: 6px 12px 6px 15px; }
+  /* La pista ("Una palabra" / "Frase de 3 palabras") se retira: las fichas ya
+     van agrupadas por palabra y se pueden contar. Es lo último que se sacrifica
+     y solo aquí, para no bajar las teclas del mínimo táctil. */
+  .palabra__pista { display: none; }
+  .palabra { padding: 12px 10px; }
+}
+
+/* ── Modo alto contraste del sistema ─────────────────────────── */
+@media (prefers-contrast: more) {
+  :root {
+    --tinta-suave: #2f5468;
+    --tinta-media: #1f4a60;
+    --borde: #9dbdd0;
+    --borde-medio: #5f92b5;
+  }
 }

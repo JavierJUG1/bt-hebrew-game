@@ -1,7 +1,17 @@
+import { useEffect, useRef } from 'react';
+
 import Confeti from './Confeti.jsx';
 import Trofeo from './Trofeo.jsx';
 
 export default function PantallaFinal({ equipos, puntajes, onNuevaPartida }) {
+  /* El botón necesita el foco para que Enter funcione, pero `autoFocus`
+     desplaza la tarjeta hasta él y deja el trofeo fuera de pantalla en
+     portátiles. Se enfoca sin arrastrar el scroll. */
+  const botonRef = useRef(null);
+  useEffect(() => {
+    botonRef.current?.focus({ preventScroll: true });
+  }, []);
+
   const maximo = Math.max(...puntajes);
   const ganadores = equipos
     .map((eq, i) => ({ eq, pts: puntajes[i] }))
@@ -19,7 +29,7 @@ export default function PantallaFinal({ equipos, puntajes, onNuevaPartida }) {
         <div className="tarjeta">
           <Trofeo />
 
-          <h2 className="tarjeta__grito tarjeta__grito--bien">
+          <h2 className="tarjeta__grito tarjeta__grito--campeon">
             🏆 ¡TENEMOS {empate ? 'UN EMPATE' : 'UN GANADOR'}! 🏆
           </h2>
           <p className="tarjeta__sub">
@@ -35,10 +45,12 @@ export default function PantallaFinal({ equipos, puntajes, onNuevaPartida }) {
                 className="ganador"
                 style={{
                   '--color-equipo': eq.color,
+                  '--color-tinta': eq.colorTinta,
                   '--color-suave': eq.colorSuave,
                   '--retardo': `${180 + i * 140}ms`,
                 }}
               >
+                <span className="equipo__ficha" data-tono={eq.tono}>{eq.id}</span>
                 <span className="ganador__hebreo" dir="rtl" lang="he">{eq.hebreo}</span>
                 <span className="ganador__latino">
                   <span className="ganador__translit">{eq.translit}</span>
@@ -63,7 +75,7 @@ export default function PantallaFinal({ equipos, puntajes, onNuevaPartida }) {
           </div>
 
           <div className="acciones">
-            <button className="btn btn--oro" onClick={onNuevaPartida} autoFocus>
+            <button className="btn btn--destacado" onClick={onNuevaPartida} ref={botonRef}>
               Nueva partida
             </button>
           </div>

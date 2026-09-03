@@ -1,7 +1,16 @@
 import { NIVELES } from '../data/config.js';
 import { SiluetaBurro } from './Burro.jsx';
+import BotonSonido from './BotonSonido.jsx';
 
-export default function BarraSuperior({ rondas, rondaIdx, ronda, onReiniciar }) {
+export default function BarraSuperior({
+  rondas,
+  rondaIdx,
+  ronda,
+  onReiniciar,
+  sonidoActivo,
+  sonidoBloqueado,
+  onAlternarSonido,
+}) {
   return (
     <header className="barra">
       <div className="marca">
@@ -36,6 +45,11 @@ export default function BarraSuperior({ rondas, rondaIdx, ronda, onReiniciar }) 
       </div>
 
       <div className="barra__acciones">
+        <BotonSonido
+          activo={sonidoActivo}
+          bloqueado={sonidoBloqueado}
+          onAlternar={onAlternarSonido}
+        />
         <button className="btn-discreto" onClick={onReiniciar}>
           Reiniciar partida
         </button>

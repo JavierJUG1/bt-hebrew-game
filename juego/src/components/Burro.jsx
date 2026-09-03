@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { VIEW_BOX, SUELO, ESTADOS_BURRO, SILUETAS } from '../data/burro.js';
+import Moscas from './Moscas.jsx';
 
 /**
  * Traduce el número de errores al fotograma del burro.
@@ -29,7 +30,7 @@ export function SiluetaBurro({ variante = 2, className }) {
 function Polvo({ llave }) {
   return (
     <svg key={llave} className="polvo" viewBox="0 0 120 60" aria-hidden="true">
-      <g fill="#cdbfa4">
+      <g fill="#a9c8de">
         <ellipse cx="34" cy="40" rx="26" ry="15" opacity=".55" />
         <ellipse cx="66" cy="32" rx="19" ry="12" opacity=".42" />
         <ellipse cx="92" cy="41" rx="13" ry="9" opacity=".3" />
@@ -65,6 +66,14 @@ export default function Burro({ errores, maximo, derrota }) {
       </div>
 
       {polvo > 0 && <Polvo llave={polvo} />}
+
+      {/* Las moscas van en su propia capa: la del burro tiene animación de
+          entrada y transform-origin propios, y las heredarían. */}
+      {derrota && (
+        <svg className="burro-escena__moscas" viewBox={VIEW_BOX} aria-hidden="true">
+          <Moscas cantidad={maximo} />
+        </svg>
+      )}
     </div>
   );
 }
@@ -77,6 +86,6 @@ function descripcion(i) {
     'El burro ya tiene cabeza y lomo.',
     'El burro apoya sus patas delanteras.',
     'El burro completo, de pie junto a la estaca.',
-    'El burro se ha instalado del todo y no piensa moverse.',
+    'El burro se ha instalado del todo y no piensa moverse, con las moscas rondándolo.',
   ][i];
 }

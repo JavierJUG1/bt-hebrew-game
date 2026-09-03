@@ -8,9 +8,13 @@ export default function Marcador({ equipos, puntajes, turnoIdx, equipoQueSube })
             key={eq.id}
             className={'equipo' + (equipoQueSube === i ? ' sube' : '')}
             data-turno={turnoIdx === i ? 'si' : 'no'}
-            style={{ '--color-equipo': eq.color, '--color-suave': eq.colorSuave }}
+            style={{
+              '--color-equipo': eq.color,
+              '--color-tinta': eq.colorTinta,
+              '--color-suave': eq.colorSuave,
+            }}
           >
-            <span className="equipo__ficha">{eq.id}</span>
+            <span className="equipo__ficha" data-tono={eq.tono}>{eq.id}</span>
             <span className="equipo__nombres">
               <span className="equipo__hebreo" dir="rtl" lang="he">{eq.hebreo}</span>
               <span className="equipo__latino">{eq.translit} · {eq.espanol}</span>
