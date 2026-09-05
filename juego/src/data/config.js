@@ -6,8 +6,12 @@
  */
 
 export const CONFIG = {
-  /** Puntos que gana un equipo por cada ronda superada. */
-  puntosPorRonda: 10,
+  /** Puntos que gana un equipo por cada ronda superada, según el nivel. */
+  puntosPorRondaPorNivel: {
+    facil: 10,
+    intermedio: 15,
+    avanzado: 20,
+  },
 
   /**
    * Puntos extra por cada error NO usado al ganar la ronda.
@@ -50,6 +54,9 @@ export const CONFIG = {
   /**
    * Cuántas rondas se juegan de cada nivel, y en qué orden van los niveles.
    *
+   * Nueve por nivel con tres equipos significa que cada equipo juega
+   * exactamente tres veces en cada nivel: 27 rondas en total.
+   *
    * El contenido se baraja DENTRO de cada nivel, nunca entre niveles: dos
    * partidas seguidas traen las palabras en distinto orden, pero la partida
    * siempre empieza fácil y termina difícil. Barajar los once de corrido
@@ -61,9 +68,9 @@ export const CONFIG = {
    * Pon `null` en un nivel para que se jueguen todas las suyas.
    */
   rondasPorNivel: {
-    facil: 4,
-    intermedio: 4,
-    avanzado: 3,
+    facil: 9,
+    intermedio: 9,
+    avanzado: 9,
   },
   ordenDeNiveles: ['facil', 'intermedio', 'avanzado'],
 };
@@ -114,4 +121,9 @@ export const NIVELES = {
 /** Errores máximos de una ronda concreta. */
 export function erroresMaximos(ronda) {
   return CONFIG.erroresMaximosPorNivel[ronda.nivel] ?? 6;
+}
+
+/** Puntos base de una ronda concreta, según su nivel. */
+export function puntosPorRonda(ronda) {
+  return CONFIG.puntosPorRondaPorNivel[ronda.nivel] ?? 10;
 }

@@ -179,17 +179,22 @@ button:disabled { cursor: default; }
 
 .marca { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
+ /* El isotipo institucional va limpio, sin caja ni fondo: es una marca a
+    color y ya trae su propia forma. Encajonarlo en un cuadro tintado lo
+    convertiría en un icono de interfaz, que es lo contrario de lo que es. */
 .marca__icono {
-  width: clamp(30px, 3vw, 40px);
-  height: clamp(30px, 3vw, 40px);
+  width: clamp(32px, 3.2vw, 44px);
+  height: clamp(32px, 3.2vw, 44px);
   flex: none;
   display: grid;
   place-items: center;
-  background: var(--lienzo-2);
-  border: 1px solid var(--borde);
-  border-radius: 12px;
 }
-.marca__icono svg { width: 68%; height: 68%; }
+.marca__icono img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
 .marca__texto { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
 .marca__titulo {
@@ -227,16 +232,26 @@ button:disabled { cursor: default; }
 
 .progreso { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; flex-wrap: wrap; }
 
-.progreso__puntos { display: flex; gap: 5px; flex-wrap: wrap; }
+/* Con 27 rondas la cadena de puntos ya no cabía en una fila y se partía en
+   dos, que se lee como ruido. Se afinan para que quepan de corrido y, de
+   paso, los pendientes se tiñen según su nivel: la misma escalera de azules
+   de las etiquetas de nivel, así que la cadena muestra también la estructura
+   de la partida —nueve fáciles, nueve intermedias, nueve avanzadas— sin
+   añadir un solo elemento a la interfaz. */
+.progreso__puntos { display: flex; gap: clamp(2px, .22vw, 4px); flex-wrap: nowrap; }
 
 .progreso__punto {
-  width: clamp(8px, .72vw, 11px);
-  height: clamp(8px, .72vw, 11px);
+  width: clamp(6px, .52vw, 9px);
+  height: clamp(6px, .52vw, 9px);
+  flex: none;
   border-radius: 50%;
   background: var(--lienzo-2);
   border: 1px solid var(--borde-medio);
   transition: var(--transicion);
 }
+.progreso__punto[data-estado="pendiente"][data-nivel="facil"]      { background: #e2f4ff; border-color: #a9dcfa; }
+.progreso__punto[data-estado="pendiente"][data-nivel="intermedio"] { background: #cfe4f6; border-color: #8fbede; }
+.progreso__punto[data-estado="pendiente"][data-nivel="avanzado"]   { background: #b3cddf; border-color: #6b9dbf; }
 .progreso__punto[data-estado="hecha"]  { background: var(--marca-azul); border-color: var(--marca-azul-oscuro); }
 .progreso__punto[data-estado="actual"] {
   background: var(--marca-vivo);
@@ -1283,6 +1298,47 @@ button:disabled { cursor: default; }
   .palabra__pista { display: none; }
   .palabra { padding: 12px 10px; }
 }
+
+/* ───────────────────────── Pie de página ────────────────────
+   Crédito de autoría. Va sobre el fondo, no en una tarjeta: pertenece al
+   documento, no al juego. El filete superior lo separa sin encerrarlo. */
+
+.pie {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(9px, 1vw, 14px);
+  flex-wrap: wrap;
+  padding: clamp(12px, 1.8vh, 20px) clamp(12px, 2vw, 24px) clamp(4px, .6vh, 8px);
+  margin-top: clamp(2px, .5vh, 6px);
+  border-top: 1px solid var(--borde);
+  text-align: center;
+}
+
+/* El isotipo es de trazo fino: por debajo de unos 30 px o con la opacidad
+   muy baja, las líneas se deshacen y queda un borrón. Se le da tamaño y casi
+   toda la opacidad; lo que lo mantiene discreto es su escala, no su palidez. */
+.pie__marca {
+  width: clamp(28px, 2.2vw, 34px);
+  height: clamp(28px, 2.2vw, 34px);
+  flex: none;
+  object-fit: contain;
+  display: block;
+  opacity: .9;
+  transition: opacity var(--transicion);
+}
+.pie:hover .pie__marca { opacity: 1; }
+
+.pie__texto {
+  margin: 0;
+  font-size: clamp(11px, .82vw, 13px);
+  line-height: 1.5;
+  letter-spacing: .01em;
+}
+
+/* Los dos nombres son lo que se busca al leer un crédito; el conector no. */
+.pie__suave  { color: var(--tinta-suave); }
+.pie__nombre { color: var(--tinta-media); font-weight: 700; }
 
 /* ── Modo alto contraste del sistema ─────────────────────────── */
 @media (prefers-contrast: more) {

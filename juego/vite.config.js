@@ -17,6 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@audios': fileURLToPath(new URL('../Assets/audios', import.meta.url)),
+      '@img': fileURLToPath(new URL('../Assets/img', import.meta.url)),
     },
   },
   server: {

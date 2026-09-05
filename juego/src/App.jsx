@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { CONFIG, SONIDO, erroresMaximos } from './data/config.js';
+import { CONFIG, SONIDO, erroresMaximos, puntosPorRonda } from './data/config.js';
 import { EQUIPOS } from './data/equipos.js';
 import { RONDAS } from './data/rondas.js';
 
@@ -15,6 +15,7 @@ import Marcador from './components/Marcador.jsx';
 import Burro from './components/Burro.jsx';
 import CapaResultado from './components/CapaResultado.jsx';
 import PantallaFinal from './components/PantallaFinal.jsx';
+import PieDePagina from './components/PieDePagina.jsx';
 
 const estadoInicialRonda = {
   usadas: new Set(),
@@ -112,7 +113,7 @@ export default function App() {
         const aciertos = new Set(r.aciertos).add(clave);
         if (frasesCompleta(palabras, usadas)) {
           const restantes = maximo - r.errores;
-          const puntos = CONFIG.puntosPorRonda + restantes * CONFIG.bonusPorErrorNoUsado;
+          const puntos = puntosPorRonda(ronda) + restantes * CONFIG.bonusPorErrorNoUsado;
           setPuntajes((p) => p.map((v, i) => (i === turnoIdx ? v + puntos : v)));
           setEquipoQueSube(turnoIdx);
           setR({ ...r, usadas, aciertos, fase: 'ganada', puntosGanados: puntos });
@@ -291,6 +292,8 @@ export default function App() {
           />
         </div>
       </div>
+
+      <PieDePagina />
 
       {terminada && capaVisible && !partidaTerminada && (
         <CapaResultado

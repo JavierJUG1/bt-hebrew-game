@@ -13,12 +13,13 @@ La interfaz sigue la **línea gráfica de la Congregación Beit Teshuvá**
 
 ## Para jugar ahora mismo
 
-Hay dos formas de abrirlo, y **la diferencia es solo el sonido**:
+Hay tres formas de abrirlo, y **la diferencia es solo el sonido**:
 
 | Archivo | Qué pasa |
 |---|---|
-| **`Juego con sonido.bat`** | La música suena desde el primer instante, sin tocar nada. **Es el recomendado para proyectar.** |
-| `Juego - Adivina la palabra (hebreo).html` | Igual de completo, pero la música espera al primer clic. |
+| **`Juego con sonido.bat`** | La música suena desde el primer instante, sin tocar nada. **Es el recomendado para proyectar sin internet.** |
+| `Juego - Adivina la palabra (hebreo).html` | Igual de completo, pero al abrirlo con doble clic (`file://`) la música espera al primer clic. |
+| `index.html`, en la raíz del repositorio | El mismo juego, pensado para servir por `https://` (por ejemplo con GitHub Pages). Ahí el autoplay silenciado suele funcionar solo, sin `.bat` ni clic — ver *Por qué existe `Juego con sonido.bat`*. |
 
 El juego es un archivo único y autocontenido: **la música y los efectos van
 dentro**. No necesita instalar nada, ni servidor, ni carpetas al lado. Funciona
@@ -39,10 +40,12 @@ proyector**, adaptándose a tablet y móvil.
 
 ## Cómo se juega
 
-1. Las 11 rondas rotan solas entre los tres equipos: 1 → 2 → 3 → 1 → …
+1. Las 27 rondas rotan solas entre los tres equipos: 1 → 2 → 3 → 1 → …
+   Nueve rondas por nivel con tres equipos significa que **cada equipo juega
+   exactamente tres veces en fácil, tres en intermedio y tres en avanzado**.
    **El orden de las palabras se baraja en cada partida**, pero la dificultad
-   se mantiene: primero las cuatro fáciles, luego las cuatro intermedias,
-   luego las tres avanzadas.
+   se mantiene: primero las nueve fáciles, luego las nueve intermedias, luego
+   las nueve avanzadas.
 2. El equipo en turno elige letras del teclado hebreo.
 3. Una letra correcta se revela en **todas** sus apariciones, con su niqqud.
 4. Una letra incorrecta gasta un intento y avanza un paso la escena del burro.
@@ -52,7 +55,7 @@ proyector**, adaptándose a tablet y móvil.
 6. Al agotar los intentos: el burro se queda plantado y **le salen las moscas**
    —una por cada intento agotado—, y **un segundo después** aparece la tarjeta
    con la respuesta. El turno pasa al siguiente equipo.
-7. Tras la ronda 11 aparece la pantalla final con la copa. Los empates muestran
+7. Tras la ronda 27 aparece la pantalla final con la copa. Los empates muestran
    a todos los equipos ganadores.
 
 `Enter` o `Espacio` avanzan en las pantallas entre rondas.
@@ -66,15 +69,16 @@ Todo lo configurable está en `juego/src/data/`:
 
 | Archivo | Qué contiene |
 |---|---|
-| `config.js` | Puntos por ronda, intentos máximos por nivel, formas finales, bonus, y el bloque `SONIDO` |
+| `config.js` | Puntos por ronda **por nivel**, intentos máximos por nivel, formas finales, bonus, y el bloque `SONIDO` |
 | `audio.js`  | Qué MP3 usa cada pista y cada efecto |
 | `equipos.js` | Nombres en hebreo, transliteración, español y los colores de cada equipo |
 | `rondas.js`  | El banco de palabras: nivel, texto hebreo, transliteración, español, referencia |
 
-### Cuatro decisiones que conviene conocer
+### Cinco decisiones que conviene conocer
 
 **1. El orden se baraja dentro de cada nivel, nunca entre niveles.**
-`rondasPorNivel: { facil: 4, intermedio: 4, avanzado: 3 }`. Cada partida
+`rondasPorNivel: { facil: 9, intermedio: 9, avanzado: 9 }` — 27 rondas, tres
+por equipo en cada nivel. Cada partida
 reordena las palabras al azar, pero siempre empieza fácil y termina difícil.
 Barajar las once de corrido rompería la curva de aprendizaje y podría abrir la
 partida con un versículo de Salmos. El barajado se rehace al pulsar "Nueva
@@ -94,7 +98,14 @@ lo correcto con niños: son la misma letra. Las cinco formas finales siguen
 teniendo su propia tecla. Ponlo en `false` si quieres que sean letras
 independientes.
 
-**4. La tarjeta de derrota espera 1,2 segundos.**
+**4. Los puntos por ronda suben con el nivel: 10 / 15 / 20.**
+`puntosPorRondaPorNivel: { facil: 10, intermedio: 15, avanzado: 20 }`, en
+`config.js`. Una frase de versículo cuesta más intentos y más tiempo que una
+palabra suelta, así que vale más al resolverla. La función `puntosPorRonda(ronda)`
+lee el valor según `ronda.nivel`; si algún nivel no está en el objeto, cae a 10
+por defecto. El `bonusPorErrorNoUsado` se sigue sumando encima, igual que antes.
+
+**5. La tarjeta de derrota espera 1,2 segundos.**
 `msAntesDeLaTarjetaDeDerrota: 1200`. Sin esa pausa, la tarjeta sale al instante
 y tapa justo lo que acaba de pasar: el burro plantándose y las moscas llegando.
 La animación existiría pero nadie la vería. Súbelo si quieres más pausa
@@ -124,14 +135,59 @@ niqqud**: el juego los conserva al mostrar y los ignora al comparar.
 `numero` ya no marca la posición en la partida —el orden se baraja— pero tiene
 que seguir siendo distinto en cada entrada.
 
-**Añadir palabras no alarga la partida.** El juego siempre juega 4 + 4 + 3, así
-que si pones ocho palabras fáciles, cada partida escoge cuatro al azar de esas
-ocho. Esa es la forma de que el juego no se agote: **acumula todas las palabras
-que quieras y cada sesión será distinta**. Si prefieres que se jueguen todas las
-de un nivel, pon `null` en ese nivel dentro de `rondasPorNivel`.
+**Añadir palabras no alarga la partida.** El juego siempre juega 9 + 9 + 9, así
+que si pones quince palabras fáciles, cada partida escoge nueve al azar de esas
+quince. Esa es la forma de que el juego no se agote: **acumula todas las
+palabras que quieras y cada sesión será distinta**. Si prefieres que se jueguen
+todas las de un nivel, pon `null` en ese nivel dentro de `rondasPorNivel`.
+
+Hoy hay exactamente nueve por nivel, así que en cada partida salen todas —
+barajadas, eso sí. En cuanto añadas la décima de un nivel, ese nivel empieza a
+rotar contenido entre partidas.
 
 Si en un nivel hay menos palabras de las pedidas, se juegan las que haya sin
 que el juego falle.
+
+---
+
+## Marcas gráficas
+
+Los dos isotipos viven en `Assets/img/`, con el alias `@img` de
+`vite.config.js` apuntando ahí — el mismo montaje que `@audios` con el sonido.
+Se declaran en `juego/src/data/imagenes.js` y Vite los incrusta al compilar.
+
+| Archivo | Dónde aparece |
+|---|---|
+| `isotipo_beit_teshuva.png` | Marca del juego, en la barra superior |
+| `isotipo_arbarujot.png` | Original de arba rujot (maestro, 2531 px) |
+| `isotipo_arbarujot_320.png` | Copia reducida, la que usa el pie de página |
+
+**Por qué hay una copia reducida.** El original mide 2531 × 2531 px. Para
+pintar un sello de 30 px el navegador tendría que decodificar 24 MB de mapa de
+bits, y en un teléfono eso se nota. La copia de 320 px pesa un 78 % menos y
+ocupa 0,4 MB en memoria. Si cambias el original, vuelve a generar la copia
+conservando el nombre.
+
+El isotipo de la barra va **sin caja ni fondo**: es una marca a color y ya trae
+su propia forma. Meterlo en un cuadro tintado lo convertiría en un icono de
+interfaz, que es justo lo contrario de lo que es.
+
+### El pie de página
+
+`juego/src/components/PieDePagina.jsx`. Cuatro decisiones:
+
+- **No es una tarjeta blanca** como el resto de bloques. Va directamente sobre
+  el fondo, separado por un filete. Así se lee como algo que está *fuera* del
+  juego, que es lo que es: un crédito, no un control. Convertirlo en panel lo
+  pondría al mismo nivel jerárquico que el marcador o el teclado.
+- **La frase no es plana.** "arba rujot" y "Beit Teshuvá" van en tinta plena;
+  el conector, en tinta suave. Un crédito se lee de un vistazo buscando los
+  dos nombres, no la preposición.
+- **El sello no se agranda.** Es una firma, no un logotipo de cabecera. Lo que
+  lo mantiene discreto es su escala, no su palidez: por debajo de unos 30 px o
+  con la opacidad muy baja, su trazo fino se deshace y queda un borrón.
+- **Sin enlaces.** No hay URL que apuntar, y un crédito que parece pulsable
+  pero no lleva a ninguna parte es una promesa rota.
 
 ---
 
@@ -146,7 +202,7 @@ compilar Vite los incrusta en el HTML.
 | `MUSICA FONDO 1/2/3.mp3` | De fondo, en orden aleatorio y en bucle infinito |
 | `PALABRA COMPLETADA.mp3` | Al resolver la palabra o la frase |
 | `PIERDE TODOS LOS INTENTOS.mp3` | Al agotar los intentos |
-| `VICTORIA.mp3` | Al terminar la ronda 11 |
+| `VICTORIA.mp3` | Al terminar la última ronda |
 
 **Para cambiar una pista**, reemplaza el MP3 en `Assets/audios/` conservando el
 nombre y vuelve a compilar. No hay que tocar código.
@@ -195,22 +251,36 @@ el permiso del navegador (late y pide el clic).
 
 ### Por qué existe `Juego con sonido.bat`
 
-Ningún navegador reproduce audio hasta que la persona interactúa con la página.
-Es una protección contra sitios que suenan solos, **no se puede desactivar
-desde el código del juego**, y está comprobado: Chrome rechaza el intento en
-`file://` con `NotAllowedError` incluso si el audio va silenciado.
+Ningún navegador reproduce audio con volumen hasta que la persona interactúa
+con la página o el sitio ya tiene su confianza. Es una protección contra
+sitios que suenan solos y **no se puede desactivar desde el código del
+juego** — pero sí hay un margen real según cómo se abra el archivo:
 
-El juego hace tres cosas ante eso:
+- **En `file://`** (doble clic al HTML) Chrome rechaza el intento con
+  `NotAllowedError` incluso si el audio va silenciado. Ahí no hay nada que
+  hacer desde el código.
+- **Servido por `http`/`https`** (el `npm run dev` de este proyecto, o el
+  juego publicado en un sitio como GitHub Pages) el autoplay **silenciado**
+  sí suele estar permitido. `intentarAutomatico()` en `lib/sonido.js` se
+  aprovecha de eso: arranca la pista con `muted = true` y, en cuanto empieza
+  a sonar, le quita el silencio — quitarle el silencio a un audio que ya está
+  reproduciéndose no cuenta como "reproducir sin gesto" para el navegador.
+  Resultado: en la mayoría de Chromes con algo de historial en el sitio, la
+  música suena sola sin ningún clic.
 
-1. **Lo intenta igual al cargar.** Si el entorno lo permite, la música suena
-   sin que nadie toque nada. No cuesta nada intentarlo.
+El juego hace tres cosas ante esto:
+
+1. **Lo intenta igual al cargar**, con el truco del silenciado. Si el entorno
+   lo permite —típicamente sirviendo por http(s)—, la música suena sin que
+   nadie toque nada. No cuesta nada intentarlo.
 2. **Si el navegador lo bloquea, lo dice.** El botón de la barra late y cambia
    a "Toca para el sonido" hasta el primer clic o tecla. Sin ese aviso, el
    silencio inicial parece una avería del juego.
-3. **El `.bat` lo resuelve del todo.** Abre Chrome (o Edge) con el permiso ya
-   concedido y en un perfil aparte, así que la música arranca sola. El perfil
-   aparte es imprescindible: si Chrome ya está abierto, reutiliza el proceso
-   existente y los parámetros nuevos se ignorarían.
+3. **El `.bat` lo resuelve del todo, para el archivo local.** Abre Chrome (o
+   Edge) con el permiso ya concedido y en un perfil aparte, así que la música
+   arranca sola incluso en `file://`. El perfil aparte es imprescindible: si
+   Chrome ya está abierto, reutiliza el proceso existente y los parámetros
+   nuevos se ignorarían.
 
 El `.bat` tiene que estar **en la misma carpeta que el HTML**. Si no encuentra
 el juego, o no hay Chrome ni Edge instalados, lo dice y abre el HTML con el
@@ -348,24 +418,28 @@ entra el juego completo sin desplazar. Solo en teléfonos muy antiguos
 ## El proyecto React
 
 ```
-Juego con sonido.bat          ← lanzador recomendado para proyectar
-Juego - Adivina la palabra (hebreo).html
+Juego con sonido.bat          ← lanzador recomendado para proyectar sin internet
+Juego - Adivina la palabra (hebreo).html   ← copia de doble clic, para file://
+index.html                    ← misma build, en la raíz, para servir por https
 Assets/audios/                ← los seis MP3 (origen único, alias @audios)
+Assets/img/                   ← los isotipos (origen único, alias @img)
 juego/
 ├── index.html
 ├── package.json
-├── vite.config.js            ← alias @audios y ajustes del archivo único
+├── vite.config.js            ← alias @audios y @img, y el archivo único
 ├── herramientas/
 │   └── generar_burro.py      ← regenera el burro desde los SVG
 └── src/
     ├── App.jsx               ← máquina de estados de la partida
     ├── styles.css            ← sistema visual completo y tokens de color
-    ├── data/                 ← config, equipos, rondas, audio, burro (generado)
+    ├── data/                 ← config, equipos, rondas, audio, imágenes,
+    │                            burro (generado)
     ├── lib/hebreo.js         ← normalización de niqqud y formas finales
     ├── lib/partida.js        ← barajado de rondas dentro de cada nivel
     ├── lib/sonido.js         ← música aleatoria, efectos y atenuados
     └── components/           ← barra, botón de sonido, palabra, teclado,
-                                burro, moscas, marcador, resultado y final
+                                burro, moscas, marcador, resultado, final
+                                y pie de página
 ```
 
 Para desarrollar:
@@ -377,8 +451,10 @@ npm run dev      # servidor de desarrollo con recarga en caliente
 npm run build    # genera dist/index.html, el archivo único
 ```
 
-Después de `npm run build`, copia `juego/dist/index.html` sobre
-`Juego - Adivina la palabra (hebreo).html` para actualizar el archivo de doble clic.
+Después de `npm run build`, copia `juego/dist/index.html` sobre los dos
+archivos de la raíz: `Juego - Adivina la palabra (hebreo).html` (para
+doble clic) e `index.html` (para publicar por https, p. ej. GitHub Pages).
+Es la misma build; solo cambia el nombre del archivo.
 
 ---
 
@@ -453,10 +529,8 @@ Cómo están montadas, en `juego/src/components/Moscas.jsx`:
   fija el primer fotograma: sin esa regla, la congelación global de animaciones
   dejaría los tres fotogramas invisibles y las moscas desaparecerían.
 
-> El icono de la barra superior también sale de `Mosca_*.svg`, así que **el
-> logotipo del juego es una mosca**. Se puso ahí cuando se creía que eran
-> siluetas de cabeza de burro. Funciona, pero si prefieres otra marca hay que
-> cambiar `SiluetaBurro` en `BarraSuperior.jsx`.
+Estos SVG **solo** se usan para las moscas. La marca de la barra superior es
+el isotipo de Beit Teshuvá (ver *Marcas gráficas*).
 
 Si cambias los SVG originales, vuelve a ejecutar:
 

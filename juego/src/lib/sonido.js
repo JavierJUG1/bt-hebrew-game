@@ -117,12 +117,14 @@ export class GestorDeSonido {
    * Intenta arrancar la música nada más cargar, sin esperar a que nadie toque
    * la página. Es lo que se quiere: que el juego suene solo al abrirlo.
    *
-   * Casi siempre el navegador lo rechazará —Chrome bloquea el autoplay en
-   * `file://` incluso con el audio silenciado— y ahí no hay nada que hacer
-   * desde el código. Pero funciona cuando el juego se abre con el lanzador
-   * `Juego con sonido.bat`, en modo quiosco, o servido desde un sitio donde
-   * el navegador ya confía en el usuario. Intentarlo no cuesta nada y en esos
-   * casos ahorra el clic.
+   * En `file://` no hay nada que hacer: ahí Chrome bloquea el autoplay
+   * incluso con el audio silenciado. Pero servido por http(s) —como en
+   * `npm run dev`, o publicado en un sitio real— el autoplay SILENCIADO sí
+   * está permitido, y quitarle el silencio a un audio que ya está sonando no
+   * cuenta como "reproducir sin gesto" para el navegador. Por eso arranca
+   * muted y se desmutea al instante: sí ahorra el clic ahí, y si el
+   * navegador llegara a bloquear igual el play() inicial, cae al plan B de
+   * siempre (arrancar con el primer clic o tecla).
    *
    * Devuelve true si sonó, false si el navegador lo bloqueó.
    */
@@ -133,13 +135,16 @@ export class GestorDeSonido {
     const a = this.musica[idx];
     a.currentTime = 0;
     a.volume = this.cfg.volumenMusica;
+    a.muted = true;
     try {
       await a.play();
+      a.muted = false;
       this.iniciado = true;
       this.pistaActual = idx;
       this.ultimaPista = idx;
       return true;
     } catch {
+      a.muted = false;
       // La canción vuelve al principio de la cola: el barajado no se pierde.
       this.cola.unshift(idx);
       return false;

@@ -1,5 +1,5 @@
 import { NIVELES } from '../data/config.js';
-import { SiluetaBurro } from './Burro.jsx';
+import { BEIT_TESHUVA } from '../data/imagenes.js';
 import BotonSonido from './BotonSonido.jsx';
 
 export default function BarraSuperior({
@@ -15,7 +15,13 @@ export default function BarraSuperior({
     <header className="barra">
       <div className="marca">
         <div className="marca__icono">
-          <SiluetaBurro variante={2} />
+          <img
+            src={BEIT_TESHUVA.src}
+            width={BEIT_TESHUVA.ancho}
+            height={BEIT_TESHUVA.alto}
+            alt={BEIT_TESHUVA.alt}
+            decoding="async"
+          />
         </div>
         <div className="marca__texto">
           <span className="marca__titulo">Adivina la palabra</span>
@@ -34,6 +40,7 @@ export default function BarraSuperior({
               <span
                 key={r.numero}
                 className="progreso__punto"
+                data-nivel={r.nivel}
                 data-estado={i < rondaIdx ? 'hecha' : i === rondaIdx ? 'actual' : 'pendiente'}
               />
             ))}

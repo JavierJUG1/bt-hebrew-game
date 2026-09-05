@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { VIEW_BOX, SUELO, ESTADOS_BURRO, SILUETAS } from '../data/burro.js';
+import { VIEW_BOX, SUELO, ESTADOS_BURRO } from '../data/burro.js';
 import Moscas from './Moscas.jsx';
 
 /**
@@ -11,19 +11,6 @@ export function fotogramaDeErrores(errores, maximo) {
   const ultimo = ESTADOS_BURRO.length - 1; // 6
   if (maximo <= 0) return 0;
   return Math.min(ultimo, Math.round((errores * ultimo) / maximo));
-}
-
-/** Silueta de cabeza de burro (assets Mosca_*). */
-export function SiluetaBurro({ variante = 2, className }) {
-  const s = SILUETAS[variante % SILUETAS.length];
-  return (
-    <svg
-      viewBox={s.viewBox}
-      className={className}
-      aria-hidden="true"
-      dangerouslySetInnerHTML={{ __html: s.svg }}
-    />
-  );
 }
 
 /** Nubecita de polvo, para acompañar cada intento fallido sin violencia. */
